@@ -15,3 +15,5 @@ RUN /root/sdk_wrapper.sh install jbake
 WORKDIR /site
 
 CMD ["/bin/bash"]
+
+ENTRYPOINT /bin/bash
