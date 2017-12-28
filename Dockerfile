@@ -1,14 +1,17 @@
-FROM dockerfile/ruby
+FROM ruby
+USER root
 
-RUN gem install s3_website
+RUN gem install s3_website sass && gem cleanup
 
-RUN apt-get update
-RUN apt-get install -y openjdk-7-jre-headless
+RUN apt-get update && apt-get install -y openjdk-8-jre-headless unzip zip && apt-get clean
 
-VOLUME ["/website", "/config"]
+RUN touch /root/.bashrc && curl -s "https://get.sdkman.io" | bash
 
-WORKDIR /website
+ADD sdk_wrapper.sh /root/sdk_wrapper.sh
+RUN chmod 744 /root/sdk_wrapper.sh
 
-ENTRYPOINT ["s3_website"]
+RUN /root/sdk_wrapper.sh install jbake
 
-CMD ["--help"]
+WORKDIR /site
+
+CMD ["/bin/bash"]
